@@ -6,9 +6,936 @@
     <meta name="author" content="Wolfgang Christl">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DB for ESP32 Settings</title>
-    <link rel="stylesheet" href="normalize.css">
-    <link rel="stylesheet" href="skeleton.css">
-    <link rel="stylesheet" href="toastify/toastify.css">
+    <style>
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/**
+ * Remove default margin.
+ */
+
+body {
+  margin: 0;
+}
+
+/* HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11
+ * and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+/**
+ * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+ */
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ */
+
+[hidden],
+template {
+  display: none;
+}
+
+/* Links
+   ========================================================================== */
+
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
+
+a {
+  background-color: transparent;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ */
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+ */
+
+b,
+strong {
+  font-weight: bold;
+}
+
+/**
+ * Address styling not present in Safari and Chrome.
+ */
+
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari, and Chrome.
+ */
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Remove border when inside `a` element in IE 8/9/10.
+ */
+
+img {
+  border: 0;
+}
+
+/**
+ * Correct overflow not hidden in IE 9/10/11.
+ */
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
+
+figure {
+  margin: 1em 40px;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ */
+
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+/**
+ * Contain overflow in all browsers.
+ */
+
+pre {
+  overflow: auto;
+}
+
+/**
+ * Address odd `em`-unit font size rendering in all browsers.
+ */
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * Known limitation: by default, Chrome and Safari on OS X allow very limited
+ * styling of `select`, unless a `border` property is set.
+ */
+
+/**
+ * 1. Correct color not being inherited.
+ *    Known issue: affects color of disabled elements.
+ * 2. Correct font properties not being inherited.
+ * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+
+/**
+ * Address `overflow` set to `hidden` in IE 8/9/10/11.
+ */
+
+button {
+  overflow: visible;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * Correct `select` style inheritance in Firefox.
+ */
+
+button,
+select {
+  text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+  cursor: pointer; /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+input {
+  line-height: normal;
+}
+
+/**
+ * It's recommended that you don't attempt to style these elements.
+ * Firefox's implementation doesn't respect box-sizing, padding, or width.
+ *
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari and Chrome on OS X.
+ * Safari (but not Chrome) clips the cancel button when the search input has
+ * padding (and `textfield` appearance).
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+
+legend {
+  border: 0; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Remove default vertical scrollbar in IE 8/9/10/11.
+ */
+
+textarea {
+  overflow: auto;
+}
+
+/**
+ * Don't inherit the `font-weight` (applied by a rule above).
+ * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.
+ */
+
+optgroup {
+  font-weight: bold;
+}
+
+/* Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+    </style>
+    <style>
+/*
+* Skeleton V2.0.4
+* Copyright 2014, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 12/29/2014
+*/
+
+
+/* Table of contents
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- Grid
+- Base Styles
+- Typography
+- Links
+- Buttons
+- Forms
+- Lists
+- Code
+- Tables
+- Spacing
+- Utilities
+- Clearing
+- Media Queries
+*/
+
+
+/* Grid
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box; }
+.column,
+.columns {
+  width: 100%;
+  float: left;
+  box-sizing: border-box; }
+
+/* For devices larger than 400px */
+@media (min-width: 400px) {
+  .container {
+    width: 85%;
+    padding: 0; }
+}
+
+/* For devices larger than 550px */
+@media (min-width: 550px) {
+  .container {
+    width: 80%; }
+  .column,
+  .columns {
+    margin-left: 4%; }
+  .column:first-child,
+  .columns:first-child {
+    margin-left: 0; }
+
+  .one.column,
+  .one.columns                    { width: 4.66666666667%; }
+  .two.columns                    { width: 13.3333333333%; }
+  .three.columns                  { width: 22%;            }
+  .four.columns                   { width: 30.6666666667%; }
+  .five.columns                   { width: 39.3333333333%; }
+  .six.columns                    { width: 48%;            }
+  .seven.columns                  { width: 56.6666666667%; }
+  .eight.columns                  { width: 65.3333333333%; }
+  .nine.columns                   { width: 74.0%;          }
+  .ten.columns                    { width: 82.6666666667%; }
+  .eleven.columns                 { width: 91.3333333333%; }
+  .twelve.columns                 { width: 100%; margin-left: 0; }
+
+  .one-third.column               { width: 30.6666666667%; }
+  .two-thirds.column              { width: 65.3333333333%; }
+
+  .one-half.column                { width: 48%; }
+
+  /* Offsets */
+  .offset-by-one.column,
+  .offset-by-one.columns          { margin-left: 8.66666666667%; }
+  .offset-by-two.column,
+  .offset-by-two.columns          { margin-left: 17.3333333333%; }
+  .offset-by-three.column,
+  .offset-by-three.columns        { margin-left: 26%;            }
+  .offset-by-four.column,
+  .offset-by-four.columns         { margin-left: 34.6666666667%; }
+  .offset-by-five.column,
+  .offset-by-five.columns         { margin-left: 43.3333333333%; }
+  .offset-by-six.column,
+  .offset-by-six.columns          { margin-left: 52%;            }
+  .offset-by-seven.column,
+  .offset-by-seven.columns        { margin-left: 60.6666666667%; }
+  .offset-by-eight.column,
+  .offset-by-eight.columns        { margin-left: 69.3333333333%; }
+  .offset-by-nine.column,
+  .offset-by-nine.columns         { margin-left: 78.0%;          }
+  .offset-by-ten.column,
+  .offset-by-ten.columns          { margin-left: 86.6666666667%; }
+  .offset-by-eleven.column,
+  .offset-by-eleven.columns       { margin-left: 95.3333333333%; }
+
+  .offset-by-one-third.column,
+  .offset-by-one-third.columns    { margin-left: 34.6666666667%; }
+  .offset-by-two-thirds.column,
+  .offset-by-two-thirds.columns   { margin-left: 69.3333333333%; }
+
+  .offset-by-one-half.column,
+  .offset-by-one-half.columns     { margin-left: 52%; }
+
+}
+
+
+/* Base Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* NOTE
+html is set to 62.5% so that all the REM measurements throughout Skeleton
+are based on 10px sizing. So basically 1.5rem = 15px :) */
+html {
+  font-size: 62.5%; }
+body {
+  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222; }
+
+
+/* Typography
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-weight: 300; }
+h1 { font-size: 4.0rem; line-height: 1.2;  letter-spacing: -.1rem;}
+h2 { font-size: 3.6rem; line-height: 1.25; letter-spacing: -.1rem; }
+h3 { font-size: 3.0rem; line-height: 1.3;  letter-spacing: -.1rem; }
+h4 { font-size: 2.4rem; line-height: 1.35; letter-spacing: -.08rem; }
+h5 { font-size: 1.8rem; line-height: 1.5;  letter-spacing: -.05rem; }
+h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
+
+/* Larger than phablet */
+@media (min-width: 550px) {
+  h1 { font-size: 5.0rem; }
+  h2 { font-size: 4.2rem; }
+  h3 { font-size: 3.6rem; }
+  h4 { font-size: 3.0rem; }
+  h5 { font-size: 2.4rem; }
+  h6 { font-size: 1.5rem; }
+}
+
+p {
+  margin-top: 0; }
+
+
+/* Links
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+a {
+  color: #1EAEDB; }
+a:hover {
+  color: #0FA0CE; }
+
+
+/* Buttons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box; }
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+  color: #333;
+  border-color: #888;
+  outline: 0; }
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0; }
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+  color: #FFF;
+  background-color: #1EAEDB;
+  border-color: #1EAEDB; }
+
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  height: 38px;
+  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box; }
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
+textarea {
+  min-height: 65px;
+  padding-top: 6px;
+  padding-bottom: 6px; }
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border: 1px solid #33C3F0;
+  outline: 0; }
+label,
+legend {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600; }
+fieldset {
+  padding: 0;
+  border-width: 0; }
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline; }
+label > .label-body {
+  display: inline-block;
+  margin-left: .5rem;
+  font-weight: normal; }
+
+
+/* Lists
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+ul {
+  list-style: circle inside; }
+ol {
+  list-style: decimal inside; }
+ol, ul {
+  padding-left: 0;
+  margin-top: 0; }
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin: 1.5rem 0 1.5rem 3rem;
+  font-size: 90%; }
+li {
+  margin-bottom: 1rem; }
+
+
+/* Code
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+code {
+  padding: .2rem .5rem;
+  margin: 0 .2rem;
+  font-size: 90%;
+  white-space: nowrap;
+  background: #F1F1F1;
+  border: 1px solid #E1E1E1;
+  border-radius: 4px; }
+pre > code {
+  display: block;
+  padding: 1rem 1.5rem;
+  white-space: pre; }
+
+
+/* Tables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E1; }
+th:first-child,
+td:first-child {
+  padding-left: 0; }
+th:last-child,
+td:last-child {
+  padding-right: 0; }
+
+
+/* Spacing
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+button,
+.button {
+  margin-bottom: 1rem; }
+input,
+textarea,
+select,
+fieldset {
+  margin-bottom: 1.5rem; }
+pre,
+blockquote,
+dl,
+figure,
+table,
+p,
+ul,
+ol,
+form {
+  margin-bottom: 2.5rem; }
+
+
+/* Utilities
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.u-full-width {
+  width: 100%;
+  box-sizing: border-box; }
+.u-max-full-width {
+  max-width: 100%;
+  box-sizing: border-box; }
+.u-pull-right {
+  float: right; }
+.u-pull-left {
+  float: left; }
+
+
+/* Misc
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+hr {
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  border-width: 0;
+  border-top: 1px solid #E1E1E1; }
+
+
+/* Clearing
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* Self Clearing Goodness */
+.container:after,
+.row:after,
+.u-cf {
+  content: "";
+  display: table;
+  clear: both; }
+
+
+/* Media Queries
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/*
+Note: The best way to structure the use of media queries is to create the queries
+near the relevant code. For example, if you wanted to change the styles for buttons
+on small devices, paste the mobile query code up in the buttons section and style it
+there.
+*/
+
+
+/* Larger than mobile */
+@media (min-width: 400px) {}
+
+/* Larger than phablet (also point when grid becomes active) */
+@media (min-width: 550px) {}
+
+/* Larger than tablet */
+@media (min-width: 750px) {}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {}
+    </style>
+    <style>
+/*!
+ * Toastify js 1.11.1
+ * https://github.com/apvarun/toastify-js
+ * @license MIT licensed
+ *
+ * Copyright (C) 2018 Varun A P
+ */
+
+.toastify {
+    padding: 12px 20px;
+    color: #ffffff;
+    display: inline-block;
+    box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12), 0 10px 36px -4px rgba(77, 96, 232, 0.3);
+    background: -webkit-linear-gradient(315deg, #73a5ff, #5477f5);
+    background: linear-gradient(135deg, #73a5ff, #5477f5);
+    position: fixed;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+    border-radius: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    max-width: calc(50% - 20px);
+    z-index: 2147483647;
+}
+
+.toastify.on {
+    opacity: 1;
+}
+
+.toast-close {
+    opacity: 0.4;
+    padding: 0 5px;
+}
+
+.toastify-right {
+    right: 15px;
+}
+
+.toastify-left {
+    left: 15px;
+}
+
+.toastify-top {
+    top: -150px;
+}
+
+.toastify-bottom {
+    bottom: -150px;
+}
+
+.toastify-rounded {
+    border-radius: 25px;
+}
+
+.toastify-avatar {
+    width: 1.5em;
+    height: 1.5em;
+    margin: -7px 5px;
+    border-radius: 2px;
+}
+
+.toastify-center {
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    max-width: fit-content;
+    max-width: -moz-fit-content;
+}
+
+@media only screen and (max-width: 360px) {
+    .toastify-right, .toastify-left {
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        max-width: fit-content;
+    }
+}
+    </style>
 
     <link rel="icon" type="image/png" sizes="192x192" href="android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -16,8 +943,659 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <meta name="theme-color" content="#ffffff">
 
-    <script src="db_settings.js"></script>
-    <script src="toastify/toastify.js"></script>
+    <script>
+// db_settings.js
+// const ROOT_URL = "http://localhost:3000/"   // for testing with local json server
+const ROOT_URL = window.location.href       // for production code
+let conn_status = 0;
+
+function change_ap_ip_visibility(){
+    var ap_ip_div = document.getElementById("ap_ip_div");
+    var ap_channel_div = document.getElementById("ap_channel_div");
+    if (document.getElementById("esp32_mode").value < 2) {
+        ap_ip_div.style.display = "block";
+        ap_channel_div.style.display = "block";
+    } else {
+        ap_ip_div.style.display = "none";
+        ap_channel_div.style.display = "none";
+    }
+}
+
+function change_msp_ltm_visibility(){
+    var msp_ltm_div = document.getElementById("msp_ltm_div");
+    var trans_pack_size_div = document.getElementById("trans_pack_size_div");
+    if (document.getElementById("telem_proto").value === "1") {
+        msp_ltm_div.style.display = "block";
+        trans_pack_size_div.style.display = "none";
+    } else {
+        msp_ltm_div.style.display = "none";
+        trans_pack_size_div.style.display = "block";
+    }
+}
+
+/**
+ * Convert a form into a JSON string
+ * @param form The HTML form to convert
+ * @returns {string} JSON formatted string
+ */
+function toJSONString(form) {
+    let obj = {}
+    let elements = form.querySelectorAll("input, select")
+    for (let i = 0; i < elements.length; ++i) {
+        let element = elements[i]
+        let name = element.name
+        let value = element.value;
+        if (!isNaN(Number(value))) {
+            if (name) {
+                obj[name] = parseInt(value)
+            }
+        } else {
+            if (name) {
+                obj[name] = value
+            }
+        }
+    }
+    return JSON.stringify(obj)
+}
+
+/**
+ * Request data from the ESP to display in the GUI
+ * @param api_path API path/request path
+ * @returns {Promise<any>}
+ */
+async function get_json(api_path) {
+    let req_url = ROOT_URL + api_path;
+
+    const controller = new AbortController()
+    // Set a timeout limit for the request using `setTimeout`. If the body
+    // of this timeout is reached before the request is completed, it will
+    // be cancelled.
+
+    const timeout = setTimeout(() => {
+        controller.abort()
+    }, 1000)
+    const response = await fetch(req_url, {
+        signal: controller.signal
+    });
+    if (!response.ok) {
+        const message = `An error has occured: ${response.status}`;
+        conn_status = 0
+        throw new Error(message);
+    }
+    return await response.json();
+}
+
+/**
+ * Create a response with JSON data attached
+ * @param api_path API URL path
+ * @param json_data JSON body data to send
+ * @returns {Promise<any>}
+ */
+async function send_json(api_path, json_data) {
+    let post_url = ROOT_URL + api_path;
+    const response = await fetch(post_url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: json_data
+    });
+    if (!response.ok) {
+        conn_status = 0
+        const message = `An error has occured: ${response.status}`;
+        throw new Error(message);
+    }
+    return await response.json();
+}
+
+function get_system_info() {
+    get_json("api/system/info").then(json_data => {
+        console.log("Received settings: " + json_data)
+        document.getElementById("about").innerHTML = "DroneBridge for ESP32 - v" + json_data["major_version"] +
+            "." + json_data["minor_version"] + " - esp-idf " + json_data["idf_version"]
+    }).catch(error => {
+        conn_status = 0
+        error.message;
+    });
+}
+
+function update_conn_status() {
+    if (conn_status)
+        document.getElementById("web_conn_status").innerHTML = "<span class=\"dot_green\"></span> connected to ESP32"
+    else {
+        document.getElementById("web_conn_status").innerHTML = "<span class=\"dot_red\"></span> disconnected from ESP32"
+        document.getElementById("current_client_ip").innerHTML = ""
+    }
+}
+
+/**
+ * Get connection status information and display it in the GUI
+ */
+function get_stats() {
+    get_json("api/system/stats").then(json_data => {
+        conn_status = 1
+        let bytes = parseInt(json_data["read_bytes"])
+        if (!isNaN(bytes) && bytes > 1000) {
+            document.getElementById("read_bytes").innerHTML = (bytes / 1000) + " kb"
+        } else if (!isNaN(bytes)) {
+            document.getElementById("read_bytes").innerHTML = bytes + " bytes"
+        }
+
+        let tcp_clients = parseInt(json_data["tcp_connected"])
+        if (!isNaN(tcp_clients) && tcp_clients > 1) {
+            document.getElementById("tcp_connected").innerHTML = tcp_clients + " clients"
+        } else if (!isNaN(tcp_clients)) {
+            document.getElementById("tcp_connected").innerHTML = tcp_clients + " client"
+        }
+
+        let udp_clients = parseInt(json_data["udp_connected"])
+        if (!isNaN(udp_clients) && udp_clients > 1) {
+            document.getElementById("udp_connected").innerHTML = udp_clients + " clients"
+        } else if (!isNaN(udp_clients)) {
+            document.getElementById("udp_connected").innerHTML = udp_clients + " client"
+        }
+
+        document.getElementById("current_client_ip").innerHTML = "IP Address: " + json_data["current_client_ip"]
+    }).catch(error => {
+        conn_status = 0
+        error.message;
+    });
+}
+
+/**
+ * Get settings from ESP and display them in the GUI. JSON objects have to match the element ids
+ */
+function get_settings() {
+    get_json("api/settings/request").then(json_data => {
+        console.log("Received settings: " + json_data)
+        conn_status = 1
+        for (const key in json_data) {
+            if (json_data.hasOwnProperty(key)) {
+                let elem = document.getElementById(key)
+                elem.value = json_data[key] + ""
+            }
+        }
+    }).catch(error => {
+        conn_status = 0
+        error.message;
+    });
+    change_ap_ip_visibility();
+    change_msp_ltm_visibility();
+}
+
+function show_toast(msg) {
+    Toastify({
+        text: msg,
+        duration: 5000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        // style: {
+        //     background: "linear-gradient(to right, #00b09b, #96c93d)"
+        // },
+        backgroundColor: "linear-gradient(to right, #b6e026, #abdc28)",
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+    }).showToast();
+}
+
+function save_settings() {
+    let form = document.getElementById("settings_form")
+    let json_data = toJSONString(form)
+    send_json("api/settings/change", json_data).then(send_response => {
+        console.log(send_response);
+        conn_status = 1
+        show_toast(send_response["msg"])
+        get_settings()  // update UI with new settings
+    });
+}
+
+function trigger_reboot() {
+    get_json("api/system/reboot").then(json_data => {
+        show_toast(json_data["msg"])
+    }).catch(error => {
+        error.message;
+    });
+}
+    </script>
+    <script>
+/*!
+ * Toastify js 1.11.1
+ * https://github.com/apvarun/toastify-js
+ * @license MIT licensed
+ *
+ * Copyright (C) 2018 Varun A P
+ */
+(function(root, factory) {
+  if (typeof module === "object" && module.exports) {
+    module.exports = factory();
+  } else {
+    root.Toastify = factory();
+  }
+})(this, function(global) {
+  // Object initialization
+  var Toastify = function(options) {
+      // Returning a new init object
+      return new Toastify.lib.init(options);
+    },
+    // Library version
+    version = "1.11.1";
+
+  // Set the default global options
+  Toastify.defaults = {
+    oldestFirst: true,
+    text: "Toastify is awesome!",
+    node: undefined,
+    duration: 3000,
+    selector: undefined,
+    callback: function () {
+    },
+    destination: undefined,
+    newWindow: false,
+    close: false,
+    gravity: "toastify-top",
+    positionLeft: false,
+    position: '',
+    backgroundColor: '',
+    avatar: "",
+    className: "",
+    stopOnFocus: true,
+    onClick: function () {
+    },
+    offset: {x: 0, y: 0},
+    escapeMarkup: true,
+    style: {background: ''}
+  };
+
+  // Defining the prototype of the object
+  Toastify.lib = Toastify.prototype = {
+    toastify: version,
+
+    constructor: Toastify,
+
+    // Initializing the object with required parameters
+    init: function(options) {
+      // Verifying and validating the input object
+      if (!options) {
+        options = {};
+      }
+
+      // Creating the options object
+      this.options = {};
+
+      this.toastElement = null;
+
+      // Validating the options
+      this.options.text = options.text || Toastify.defaults.text; // Display message
+      this.options.node = options.node || Toastify.defaults.node;  // Display content as node
+      this.options.duration = options.duration === 0 ? 0 : options.duration || Toastify.defaults.duration; // Display duration
+      this.options.selector = options.selector || Toastify.defaults.selector; // Parent selector
+      this.options.callback = options.callback || Toastify.defaults.callback; // Callback after display
+      this.options.destination = options.destination || Toastify.defaults.destination; // On-click destination
+      this.options.newWindow = options.newWindow || Toastify.defaults.newWindow; // Open destination in new window
+      this.options.close = options.close || Toastify.defaults.close; // Show toast close icon
+      this.options.gravity = options.gravity === "bottom" ? "toastify-bottom" : Toastify.defaults.gravity; // toast position - top or bottom
+      this.options.positionLeft = options.positionLeft || Toastify.defaults.positionLeft; // toast position - left or right
+      this.options.position = options.position || Toastify.defaults.position; // toast position - left or right
+      this.options.backgroundColor = options.backgroundColor || Toastify.defaults.backgroundColor; // toast background color
+      this.options.avatar = options.avatar || Toastify.defaults.avatar; // img element src - url or a path
+      this.options.className = options.className || Toastify.defaults.className; // additional class names for the toast
+      this.options.stopOnFocus = options.stopOnFocus === undefined ? Toastify.defaults.stopOnFocus : options.stopOnFocus; // stop timeout on focus
+      this.options.onClick = options.onClick || Toastify.defaults.onClick; // Callback after click
+      this.options.offset = options.offset || Toastify.defaults.offset; // toast offset
+      this.options.escapeMarkup = options.escapeMarkup !== undefined ? options.escapeMarkup : Toastify.defaults.escapeMarkup;
+      this.options.style = options.style || Toastify.defaults.style;
+      this.options.style.background = Toastify.defaults.backgroundColor || options.backgroundColor;
+
+      // Returning the current object for chaining functions
+      return this;
+    },
+
+    // Building the DOM element
+    buildToast: function() {
+      // Validating if the options are defined
+      if (!this.options) {
+        throw "Toastify is not initialized";
+      }
+
+      // Creating the DOM object
+      var divElement = document.createElement("div");
+      divElement.className = "toastify on " + this.options.className;
+
+      // Positioning toast to left or right or center
+      if (!!this.options.position) {
+        divElement.className += " toastify-" + this.options.position;
+      } else {
+        // To be depreciated in further versions
+        if (this.options.positionLeft === true) {
+          divElement.className += " toastify-left";
+          console.warn('Property `positionLeft` will be depreciated in further versions. Please use `position` instead.')
+        } else {
+          // Default position
+          divElement.className += " toastify-right";
+        }
+      }
+
+      // Assigning gravity of element
+      divElement.className += " " + this.options.gravity;
+
+      if (this.options.backgroundColor) {
+        // This is being deprecated in favor of using the style HTML DOM property
+        console.warn('DEPRECATION NOTICE: "backgroundColor" is being deprecated. Please use the "style.background" property.');
+      }
+
+      // Loop through our style object and apply styles to divElement
+      for (var property in this.options.style) {
+        divElement.style[property] = this.options.style[property];
+      }
+
+      // Adding the toast message/node
+      if (this.options.node && this.options.node.nodeType === Node.ELEMENT_NODE) {
+        // If we have a valid node, we insert it
+        divElement.appendChild(this.options.node)
+      } else {
+        if (this.options.escapeMarkup) {
+          divElement.innerText = this.options.text;
+        } else {
+          divElement.innerHTML = this.options.text;
+        }
+
+        if (this.options.avatar !== "") {
+          var avatarElement = document.createElement("img");
+          avatarElement.src = this.options.avatar;
+
+          avatarElement.className = "toastify-avatar";
+
+          if (this.options.position == "left" || this.options.positionLeft === true) {
+            // Adding close icon on the left of content
+            divElement.appendChild(avatarElement);
+          } else {
+            // Adding close icon on the right of content
+            divElement.insertAdjacentElement("afterbegin", avatarElement);
+          }
+        }
+      }
+
+      // Adding a close icon to the toast
+      if (this.options.close === true) {
+        // Create a span for close element
+        var closeElement = document.createElement("span");
+        closeElement.innerHTML = "&#10006;";
+
+        closeElement.className = "toast-close";
+
+        // Triggering the removal of toast from DOM on close click
+        closeElement.addEventListener(
+          "click",
+          function(event) {
+            event.stopPropagation();
+            this.removeElement(this.toastElement);
+            window.clearTimeout(this.toastElement.timeOutValue);
+          }.bind(this)
+        );
+
+        //Calculating screen width
+        var width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+
+        // Adding the close icon to the toast element
+        // Display on the right if screen width is less than or equal to 360px
+        if ((this.options.position == "left" || this.options.positionLeft === true) && width > 360) {
+          // Adding close icon on the left of content
+          divElement.insertAdjacentElement("afterbegin", closeElement);
+        } else {
+          // Adding close icon on the right of content
+          divElement.appendChild(closeElement);
+        }
+      }
+
+      // Clear timeout while toast is focused
+      if (this.options.stopOnFocus && this.options.duration > 0) {
+        var self = this;
+        // stop countdown
+        divElement.addEventListener(
+          "mouseover",
+          function(event) {
+            window.clearTimeout(divElement.timeOutValue);
+          }
+        )
+        // add back the timeout
+        divElement.addEventListener(
+          "mouseleave",
+          function() {
+            divElement.timeOutValue = window.setTimeout(
+              function() {
+                // Remove the toast from DOM
+                self.removeElement(divElement);
+              },
+              self.options.duration
+            )
+          }
+        )
+      }
+
+      // Adding an on-click destination path
+      if (typeof this.options.destination !== "undefined") {
+        divElement.addEventListener(
+          "click",
+          function(event) {
+            event.stopPropagation();
+            if (this.options.newWindow === true) {
+              window.open(this.options.destination, "_blank");
+            } else {
+              window.location = this.options.destination;
+            }
+          }.bind(this)
+        );
+      }
+
+      if (typeof this.options.onClick === "function" && typeof this.options.destination === "undefined") {
+        divElement.addEventListener(
+          "click",
+          function(event) {
+            event.stopPropagation();
+            this.options.onClick();
+          }.bind(this)
+        );
+      }
+
+      // Adding offset
+      if(typeof this.options.offset === "object") {
+
+        var x = getAxisOffsetAValue("x", this.options);
+        var y = getAxisOffsetAValue("y", this.options);
+
+        var xOffset = this.options.position == "left" ? x : "-" + x;
+        var yOffset = this.options.gravity == "toastify-top" ? y : "-" + y;
+
+        divElement.style.transform = "translate(" + xOffset + "," + yOffset + ")";
+
+      }
+
+      // Returning the generated element
+      return divElement;
+    },
+
+    // Displaying the toast
+    showToast: function() {
+      // Creating the DOM object for the toast
+      this.toastElement = this.buildToast();
+
+      // Getting the root element to with the toast needs to be added
+      var rootElement;
+      if (typeof this.options.selector === "string") {
+        rootElement = document.getElementById(this.options.selector);
+      } else if (this.options.selector instanceof HTMLElement || this.options.selector instanceof ShadowRoot) {
+        rootElement = this.options.selector;
+      } else {
+        rootElement = document.body;
+      }
+
+      // Validating if root element is present in DOM
+      if (!rootElement) {
+        throw "Root element is not defined";
+      }
+
+      // Adding the DOM element
+      var elementToInsert = Toastify.defaults.oldestFirst ? rootElement.firstChild : rootElement.lastChild;
+      rootElement.insertBefore(this.toastElement, elementToInsert);
+
+      // Repositioning the toasts in case multiple toasts are present
+      Toastify.reposition();
+
+      if (this.options.duration > 0) {
+        this.toastElement.timeOutValue = window.setTimeout(
+          function() {
+            // Remove the toast from DOM
+            this.removeElement(this.toastElement);
+          }.bind(this),
+          this.options.duration
+        ); // Binding `this` for function invocation
+      }
+
+      // Supporting function chaining
+      return this;
+    },
+
+    hideToast: function() {
+      if (this.toastElement.timeOutValue) {
+        clearTimeout(this.toastElement.timeOutValue);
+      }
+      this.removeElement(this.toastElement);
+    },
+
+    // Removing the element from the DOM
+    removeElement: function(toastElement) {
+      // Hiding the element
+      // toastElement.classList.remove("on");
+      toastElement.className = toastElement.className.replace(" on", "");
+
+      // Removing the element from DOM after transition end
+      window.setTimeout(
+        function() {
+          // remove options node if any
+          if (this.options.node && this.options.node.parentNode) {
+            this.options.node.parentNode.removeChild(this.options.node);
+          }
+
+          // Remove the element from the DOM, only when the parent node was not removed before.
+          if (toastElement.parentNode) {
+            toastElement.parentNode.removeChild(toastElement);
+          }
+
+          // Calling the callback function
+          this.options.callback.call(toastElement);
+
+          // Repositioning the toasts again
+          Toastify.reposition();
+        }.bind(this),
+        400
+      ); // Binding `this` for function invocation
+    },
+  };
+
+  // Positioning the toasts on the DOM
+  Toastify.reposition = function() {
+
+    // Top margins with gravity
+    var topLeftOffsetSize = {
+      top: 15,
+      bottom: 15,
+    };
+    var topRightOffsetSize = {
+      top: 15,
+      bottom: 15,
+    };
+    var offsetSize = {
+      top: 15,
+      bottom: 15,
+    };
+
+    // Get all toast messages on the DOM
+    var allToasts = document.getElementsByClassName("toastify");
+
+    var classUsed;
+
+    // Modifying the position of each toast element
+    for (var i = 0; i < allToasts.length; i++) {
+      // Getting the applied gravity
+      if (containsClass(allToasts[i], "toastify-top") === true) {
+        classUsed = "toastify-top";
+      } else {
+        classUsed = "toastify-bottom";
+      }
+
+      var height = allToasts[i].offsetHeight;
+      classUsed = classUsed.substr(9, classUsed.length-1)
+      // Spacing between toasts
+      var offset = 15;
+
+      var width = window.innerWidth > 0 ? window.innerWidth : screen.width;
+
+      // Show toast in center if screen with less than or equal to 360px
+      if (width <= 360) {
+        // Setting the position
+        allToasts[i].style[classUsed] = offsetSize[classUsed] + "px";
+
+        offsetSize[classUsed] += height + offset;
+      } else {
+        if (containsClass(allToasts[i], "toastify-left") === true) {
+          // Setting the position
+          allToasts[i].style[classUsed] = topLeftOffsetSize[classUsed] + "px";
+
+          topLeftOffsetSize[classUsed] += height + offset;
+        } else {
+          // Setting the position
+          allToasts[i].style[classUsed] = topRightOffsetSize[classUsed] + "px";
+
+          topRightOffsetSize[classUsed] += height + offset;
+        }
+      }
+    }
+
+    // Supporting function chaining
+    return this;
+  };
+
+  // Helper function to get offset.
+  function getAxisOffsetAValue(axis, options) {
+
+    if(options.offset[axis]) {
+      if(isNaN(options.offset[axis])) {
+        return options.offset[axis];
+      }
+      else {
+        return options.offset[axis] + 'px';
+      }
+    }
+
+    return '0px';
+
+  }
+
+  function containsClass(elem, yourClass) {
+    if (!elem || typeof yourClass !== "string") {
+      return false;
+    } else if (
+      elem.className &&
+      elem.className
+        .trim()
+        .split(/\s+/gi)
+        .indexOf(yourClass) > -1
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Setting up the prototype for the init object
+  Toastify.lib.init.prototype = Toastify.lib;
+
+  // Returning the Toastify function to be assigned to the window object/module
+  return Toastify;
+});
+    </script>
     <style>
         html {
             min-height: 100%;
@@ -84,7 +1662,7 @@
 <div class="container">
     <br>
     <div class="twelve columns">
-        <img src="DroneBridgeLogo.png" alt="DB Logo">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAAdCAYAAACDrXEHAAAACXBIWXMAAAV+AAAFfgE+AsMhAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAD/dJREFUeJztnH+UVMWVxz+3e4YZfiaKCCgYo0TddY1GN64ahYBwsiIxe2DBTSJ4IAkajXEhHOhuiHRWmG4QxWA0kYQAWX9sZEXQldFVIyKinkUwi2hQQAMqIr+HAaaHmb77x3s9Xe/1+9Ez0wPKzvecPjN969at2/XqVt26desJ/w+hSSrJcKQI1v1AHfAeyjqUBTKLDW2s3gkHjZMAZhbBuh+oAQ4Cu1FeJMJvpIqdJdRlEnCXQfpEUvRuhbwaoKtBullSPNhSeW2FsuYwqyJU87M8gSflWt4tlTL6GB3pwq1NhHIekyFsK5X8FuCL9t9eCFch3K5xlqGMkzT7jqNeJyq+SL7PQRiAMknjjJYUy46fWp9/NMvQWUmUBmM2VP4KpTN0yujqkF/Pm3BcDd0L/4RwgU5hkMz6zOl2IqILsETjDJIULx9vZT6vaJ6hAzS0gRZ+8rWN23JiB/Cx8b0C6AH09OA9mwj/oeMZIPM5eky0O7GgwAse1C4InYC/xTk2y4B5wNda3bLQiDqeWX2rZX4O0HxDN7uoLQzx+JnNbyXFdDdRE/REGQvcAXQ0ii6nO7cB9xwrBU8gqKQY4luYoDfK0zgN+yKdxrkyg02taViqmAvMbY2MzyNaZ+hSOkUAqAUibSi/BbADQWmN8yrwHFBuFE/Q8dxX7KquMU5C6EEF2yRJXSAvCAl6Ab1Raqlju8wtKoAYrEOSTmToQ5Y69rGjuR6JxulOltMAiPJpKQNlOUgVOzTONOBpR0GWM6E4Q9ckZdRxJg3UyBw+bY0+mqSMw/QiShca+Uhmc7DFskCYQl+EHkT5lHI+kiTZFsubRGcinEGESqLs9pPXPEN/CfhSS1UqEm3tMbQQkuIljfN74CaD3IdTGAxU5wgaZziQMHiepJZZdOFB4AYgSoZGjbOcCn4gSfab7WiCISg/BK5DqWwqqKRe47yCcj9plopP72iMKQgj8wTuljSPaoKrUWJkGAREiADdqdEYy4DpkuYDv9+uSSLUcwPKT4GLidhTsILGeRflD1QyV5IcDurDZkHZ5THRF0wqmuBl1PC0GhlIlAFkmI/Qm3LQOFvJMlFmsVwTjEGNgDLskhSDPVWYyulkmU6GEUQ5GYAojRpnFVnukFmsLvrnTKAjlUzAGj9nAJAFMvxV49xLBfPIMByIGdWqJcXPPeXFuQqYCgwEOhjydmqCx2lgpszOb0Vbt0cv9Yp7CKdGnyFDByDCIrIOQwflCgxDx9rXX2KU/5kuLAauN3iiwN9jHSVZbDFOAh5Gucan9Q7AQISBxPmT1nO93M3uAi6hr6N9oafGSaFMofCJdUMYgzBUJ9NfZvOOW5xOpisZlgDf8tHrHIQZZBir07hGZvCeD1/zEOFa1/PfQQfeLuBTvgZ0bvpeRn+UJ3COpLOIUmHznwp81Sj7xKt5ncKVZHkSOMlVFAUGEmGVJphSzBi1t38rgIs9ir8EzCXDEOBZzGcHfymQBUKcNDDZp7meKLcQZYwmGCVV1thsneveFvgsh7bKeZMMDTj77dLAOsK1eAX0hEdzLpYm6UKGFyg+2DSIclZrjMtDj/mUmxHODeE5hSgPYK0OeXKSCBkeB//9tIGzaWSlxvmqpNgTxmxPbBYsl9jaEgk9UUag3O6qcqckiwicKQsoHNc1HOGp0Lo5EdP4Mo38F/CFADZBmR0qK0mZ3YdeRm5iKPD1UOXiJPE3chNdUJbrVPrLTF6LeHGoIvoUO5s+T/OdpsKjxsfudl1BNwf/U1wdpIE+w8kO/icZ4Cm/oUl+D5f8K4v4oSWHva92r6K9QqrljPwQ8DywDlAaebiJI0OaQiPfijAR+DZwM7DWqQznIiwKV9o2cuEJoD9RzgLGAAdcnAM04UocqWM8hUb+iC3nHIQbwbH/PQ1lTqhOEEHY2/TJsg1hC8IWYA3Cz8gbqwL3SIpfFyEX8v29Aau/96EsbVZ8o5F7KDTytSjDES5BGQX8uShZGcYC33BRtyPcSJTzyHIVykM2vUeQKE1wEZa7buJ1hGFE6Ycw1KVXOVkWapKI94r+C4QLONWg5PeKXsG4DBGyBr/abpIfjhKh3uDP2vy1OJ3LnFtUS5SowS/2nuT4oAancbtdOy98SITLZCYfAegUzpdZbATQSZwK/MjBrayhkm9Jktom0kh+Rz8WA983OK/TKfSXWawKbF1ZRIpxxr7+fU0QRVlocIkdZNthVUEQJjnkCI9TxQ2GnPc0xgaEteTCqMJ3Nc6kYlb1oqAspJJ4M2tNkBT3gr31kKKeETZ/H6zJ1cQr1DHEmCzW6SRWUM5rwN+FiLzF9X0fSn9JNcVENgGrNcYuhAnByjERa+uQw2YqGGyMky06mdVE2QRNk/Z51DPEc0UHrMTP3MecCxuMT86R2u/izwSqayU4+vE3uD5e+gTGq9sc7s1FlyLq3JUzcoCckQNQzhhwTFyNwGjTyAFkCY0c5SbE5VFYq2oY7iwI3jXwfAFXhFOa/k9wPnC2o1z5pVuOpFmPdRqRQ4W9XSkNhHFk+MAOchaD96lgXlP12RxsVmJThKtwGhMot7s9ApnDIYQ7g0RpnO7AhS7y/Z6BzyzTsbw+b1lJIsAwl16/Kxgn1onAb1zVh/vv0U1jMldZv+M1k99/+rBwEO/owCHcXZynmwcGx/fYravru9sFLoTwp4DSAY5vyuuSZqunmDkc0gTLgB8asr8Z0voBT3n72Ul3Fy1rpJ9mudSjn/c49tZ5vIcZrNOCwe2GIvzWg9oN6Ia1Sp5hlPTGyo4bEZoKq7zYmuMqIlzgmMqE3ZLiDU9e4dXAYJxyAVLQi56yZDYHNc5bwD94ymrgK7i9xwg7fZ7H+y49LvQ39IyDMQ+vYNl+cDjrYYZerPycnMM4jfv4Grp77xaW864cYUtA+Zcd36Qw8u2S5i4/LaT9wsg8IPM5qnEaMafWiNGz4ti65bCxqL4XlydQCJUq1+mFmyHG9QiLyY+sCPBrvY1quS/QZ9xchIZBcBqO5j2xApSzgwxZ/Ed8oRFKgHchbEN9DL3R43koC4u0hbOKc93N1dojGFfA7+uA2PBz3Wtd8nPtHgrQ5xhCp9KXQkMPS+CoDQkEVbq+B/86KRjkHXSkpx+UQ1DbQQnNnQPKgqF0anFdG5Lmj8B8F7kXnbk8pOquVjWcdcV/AuJBkqQBnK6zAxFHclVOvv+zygZYjrbieUDn4lZ0E15D4wDOFb2Y8+9i5Jtywvb9xwKNXFkwg2roRYvgIyFlp2MF9F5JTX53+R5ZQmNAjZYeWLqzv+pQkkXVjLC9hW06Iaz1GEvnASsD2m5d7ro4E5g8+jtfZB2LdvOVlWW/x4rbB/gfn7b9r8sqtR6y7kGLyPqLkC3Tau42hD0kQ1kPONcVP9fapHvs6fUxOtKVGUbJfLmGTdS66obFAA578+sKuiFGfrrygAwNdJNbDAUhwi0FIS1YEVI1eOCJ4yINKFfoSKIBxnuV6/v6kPZbCve+vhKYf0yv56rntiR4/51t5ZIgfOB6xifrVE43g6lNqKdfiC5vF6zfwsXAE25WOzX5sgBZmz02CC9IOnT8AVDGXibmW+MNcgPHr7v8gnEZT3pHh3zhOWATB8HDqbGcILNjcj/ML0h3gC5kDflZnoLSG7qOp5zupNGC8/vHglJHbYStqC8D/2x8P51+jIPCYJWd9vhNJ5HlIfJbhkbWEC3Yfw4CHnc2jxDnITtldSPwFhVslGQ+668lsC+2/LigICyGIa1MucqyxrVyClluBKoKlWRsoCqz+VBjbHIlLN2kCX5VcEegnmkEJOjIXXyicTaDY3K5Go+FRmNMRzi96XnUs6HMMT/7rdDFBONM5IbGhzgPjvyi9H4rup8+Oex21W1NyqxyicYY76BF6Aicg/JtoK+rxhGKe2tKmFYPYw0icw92n8YQtrAgt7JrnGHAIpy/+GMyjrPwkkFm87HGeQ4zmi7M1TjvSMpIRY3xI+B7rmf7L8Afg8QX9LUlvxPQCSviPgKM4z4L26nglWb+lOYhzTrivI11VTaHn2uCN6SKZ3MEjTMajJek+EGYD4bXDD3I8pLG+FeOspYKegG3otwcKkv5A8K/GZSf6FRWysx81p/G+DrCFKBj08grZ14Ze32Eeq/Q/rnuJn/OuarB+zbaQZwrdI5+CO+V/hBOc8n9v8dHfktgnf06z3+DTfRWx4BvabMp9tg3tcyrkxUID9KPGRpnK1Zk3T3RNKL8oBQ32vyVI4EymPzT6gus1ThLETbbeebu5JL1VDpXfU/JEvK6Ja++F2KtOjorAgKqMB1YYpArUao1xqt29t55FJOuClDBA9Qx3rGqW/9X0wH378xAQLJZJb8kw4/JJ8N0IMtyjVONlbnXB+F7OAO8NUSYHWEfOD45eCXMrMQ76u6XMHPAJducVIqJ6ucmlcM+8g+75JcmFysM9cDtkirdSiop7kU970j3wDpXdRv5UeAmSfNMqXTw1KuKdSi34ByOHYHvo0wHrsOcXoXdRPmuHY0uLZS7pYpHSi7XA5LiPxEecJMRrgBGkzNyaxvx34GyrLTpYXjcvHPhEdzXcgtl1RBhOM5AqWDlyd+BMA6nkTcAN8pMPvI39IzxMcNJfsdrXvw1Ltk5+Qdd/KY34He8ZvLm6Ltdst1biNIiAyxGuERS+cyrUkHSTARGhO5BYT1ZBkmKBaXWwUev+cBwCImkC6uJcFlrXwzhgQ0ooyTtSsdta1TxE/uUwS+Y+iwNDKaI5UXSbKaBixCWUHhutRdhMhWMpjDQWLBhlZm8htAf5bWQZrci/GMuwaiMQ8YN8zoruUKSZHWkB30lDTqCv2miH7UjkYs4gMnf2Q7592U/Gz3o57LXk342ux30WnsWPJ9PPekH2Qke9HA0oI57v94QMii1KH+hkfUyJzRDABpZRcRIBokEnLO6m0uxFFiqCS5GGQachZVXvw/hfZRnSbHK7y66jUdR/tf4DZ4JMzZuRY1NVNT72EdSLNMkz1DPQLIMQTgN6I6wD2UTEaplJmt8W1Gq8UnccWGfrfMRlMNEeEeqrNz7ANk/xcyzLAs5hRCeJ2vsrcX7mQooaX6hMf7ddocvxHLhtyA8kXsOmmABWeO4L+t93Cp38QkwSidxKmVcBJyEsoPDvJ5LANK4K19UvceOVPGmJvkGR7mULNeinInQA6GOLFsRVlLBM+Ztv8/AO1za0Y4TF5pgDABZtlHGdsrY7nfdVuOsxEyJVhKSJlUKPYpJVm1HO9rRUihjURYjvEgjm8lQpzHHS0gsthj9KMxz986xbwGa/+KJdrSjHcVDeB115D4IwjyN8xX75KIjyoUe0fJdVBb/qqpwNdrRjna0GezEn7fAfudc0RW5TdL8qlR6tLvu7WhHG0Kq2EGEawg7tcgji5Aizf0l1aOUwtrRjnZ4QyfRmXJGAUMRzkfphXX3vh7rIPpd4FVgoaQKXwrZWvwfeFei6hm5ApUAAAAASUVORK5CYII=" alt="DB Logo">
     </div>
 </div>
 <div class="container">
